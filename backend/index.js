@@ -241,6 +241,7 @@ app.get('/api/scans', requireAuth, async (req, res) => {
       headline: s.headline,
       note: s.summaryTags?.join(' • ') ?? '',
       photoUrl: s.photoUrl ?? null, // null if never stored, or expired & auto-deleted
+      metrics: s.metrics ?? null, // hydration/barrier/redness/smoothness — powers the Progress page's trend charts
     }))
   );
 });

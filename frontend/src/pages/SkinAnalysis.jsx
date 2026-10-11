@@ -18,21 +18,31 @@ const TIPS = [
 export default function SkinAnalysis() {
   const navigate = useNavigate();
   const showToast = useToast();
-  const fileInputRef = useRef(null);
+  const galleryInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(SKIN_SCAN_PLACEHOLDER);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [lensFront, setLensFront] = useState(false);
+  const [lensFront, setLensFront] = useState(true); // front/selfie camera by default
   const [storeConsent, setStoreConsent] = useState(false); // opt-in, off by default
 
-  const handleFileChange = (e) => {
+  const hasRealPhoto = previewImage !== SKIN_SCAN_PLACEHOLDER;
+
+  const handleGalleryChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setPreviewImage(URL.createObjectURL(file));
     showToast('Photo loaded from gallery');
   };
 
-  const handleCapture = () => {
-    if (isAnalyzing) return;
+  const handleCameraChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPreviewImage(URL.createObjectURL(file));
+    showToast('Photo captured');
+  };
+
+  const handleAnalyze = () => {
+    if (isAnalyzing || !hasRealPhoto) return;
     setIsAnalyzing(true);
     analyzeSkinPhoto(previewImage, storeConsent).then((result) => {
       navigate('/analysis/results', { state: { result, photo: previewImage } });
@@ -165,32 +175,56 @@ export default function SkinAnalysis() {
             <button
               type="button"
               disabled={isAnalyzing}
-              onClick={handleCapture}
-              aria-label="Capture photo and analyze"
+              onClick={() => cameraInputRef.current?.click()}
+              aria-label="Open camera and take a selfie"
               className="relative group flex items-center justify-center w-20 h-20 rounded-full bg-surface-container-lowest shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-70"
             >
               <div className="absolute inset-1.5 rounded-full bg-gradient-to-tr from-primary-fixed to-primary-container p-1 flex items-center justify-center transition-transform group-hover:scale-105">
                 <div className="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center shadow-inner">
                   <div className="w-10 h-10 rounded-full bg-primary-container group-active:scale-90 transition-transform flex items-center justify-center text-on-primary shadow-sm">
-                    <Icon name={isAnalyzing ? 'progress_activity' : 'photo_camera'} className={`text-[24px] ${isAnalyzing ? 'animate-spin' : ''}`} />
+                    <Icon name="photo_camera" className="text-[24px]" />
                   </div>
                 </div>
               </div>
             </button>
           </div>
-          <span className="font-label-md text-label-md font-semibold text-on-surface">
-            {isAnalyzing ? 'Analyzing your skin...' : 'Take a Selfie'}
-          </span>
+          <span className="font-label-md text-label-md font-semibold text-on-surface">Take a Selfie</span>
 
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+          {/* capture=user/environment tells mobile browsers (Android Chrome
+              in particular) to open the native camera app directly for this
+              input, instead of a plain file picker. */}
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture={lensFront ? 'user' : 'environment'}
+            className="hidden"
+            onChange={handleCameraChange}
+          />
+          <input ref={galleryInputRef} type="file" accept="image/*" className="hidden" onChange={handleGalleryChange} />
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => galleryInputRef.current?.click()}
             className="w-full h-13 py-3 px-space-md flex items-center justify-center gap-space-xs rounded-full bg-surface-container-high text-on-surface active:bg-surface-container-highest transition-colors"
           >
             <Icon name="photo_library" className="text-[20px] text-on-surface-variant" />
             <span className="font-label-lg text-label-lg text-on-surface font-semibold">Upload from Gallery</span>
           </button>
+
+          {hasRealPhoto && (
+            <button
+              type="button"
+              disabled={isAnalyzing}
+              onClick={handleAnalyze}
+              className="w-full h-13 py-3 px-space-md flex items-center justify-center gap-space-xs rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold shadow-sm active:scale-[0.98] transition-all disabled:opacity-70"
+            >
+              <Icon
+                name={isAnalyzing ? 'progress_activity' : 'auto_awesome'}
+                className={`text-[20px] ${isAnalyzing ? 'animate-spin' : ''}`}
+              />
+              <span>{isAnalyzing ? 'Analyzing your skin...' : 'Analyze My Skin'}</span>
+            </button>
+          )}
         </div>
 
         <section className="flex flex-col gap-space-md pt-space-xs">

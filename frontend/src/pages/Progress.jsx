@@ -20,6 +20,37 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
+// Builds a TrendChart-shaped object (see components/TrendChart.jsx) from real
+// scan history for one metric. `invert`: true when a LOWER value is the
+// improvement (redness) so the line still trends up-and-right = "better",
+// matching the sample data's visual convention.
+function buildRealTrend(scansChrono, metricKey, { invert = false, color, finalColor } = {}) {
+  const n = scansChrono.length;
+  const toY = (value) => {
+    const clamped = Math.max(0, Math.min(100, value));
+    return invert ? (clamped / 100) * 80 : 80 - (clamped / 100) * 80;
+  };
+  const points = scansChrono.map((s, i) => ({
+    x: n === 1 ? 150 : Math.round((i / (n - 1)) * 300),
+    y: Math.round(toY(s.metrics[metricKey].value)),
+    final: i === n - 1,
+  }));
+  const path = points.reduce((acc, p, i) => `${acc}${i === 0 ? 'M' : ' L'} ${p.x} ${p.y}`, '');
+  const firstVal = scansChrono[0].metrics[metricKey].value;
+  const lastVal = scansChrono[n - 1].metrics[metricKey].value;
+  const diff = lastVal - firstVal;
+  const sign = diff > 0 ? '+' : '';
+  return {
+    current: `${lastVal}%`,
+    delta: `${sign}${diff}% vs ${formatDate(scansChrono[0].date)}`,
+    path,
+    points,
+    color,
+    finalColor,
+    labels: scansChrono.map((s) => `${formatDate(s.date)} (${s.metrics[metricKey].value}%)`),
+  };
+}
+
 export default function Progress() {
   const showToast = useToast();
   const [range, setRange] = useState('Month');
@@ -64,6 +95,27 @@ export default function Progress() {
       : BEFORE_AFTER;
   const isSampleBeforeAfter = scansWithPhotos.length < 2;
   const isSampleMilestones = !hasRealScans;
+
+  // Metrics trend doesn't need photos (score/metrics are always saved
+  // regardless of the photo-save toggle) — just real analyses, chronological
+  // oldest-first, capped at the last 4 for chart readability.
+  const scansWithMetrics = hasRealScans ? realScans.filter((s) => s.metrics) : [];
+  const trendScansChrono = scansWithMetrics.slice(0, 4).reverse();
+  const isSampleTrend = trendScansChrono.length < 2;
+
+  const hydrationTrend = isSampleTrend
+    ? HYDRATION_TREND
+    : buildRealTrend(trendScansChrono, 'hydration', { color: '#486551' });
+  const rednessTrend = isSampleTrend
+    ? REDNESS_TREND
+    : buildRealTrend(trendScansChrono, 'redness', { invert: true, color: '#df7a7a', finalColor: '#994345' });
+  const barrierScore = isSampleTrend
+    ? BARRIER_SCORE
+    : {
+        percent: trendScansChrono[trendScansChrono.length - 1].metrics.barrier.value,
+        current: trendScansChrono[trendScansChrono.length - 1].metrics.barrier.status,
+        baseline: `${formatDate(trendScansChrono[0].date)}: ${trendScansChrono[0].metrics.barrier.status}`,
+      };
 
   return (
     <TabLayout subtitle="Skin Progress">
@@ -204,10 +256,22 @@ export default function Progress() {
         <section className="flex flex-col space-y-space-md">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-headline-sm text-on-surface">Skin Metrics Trend</h2>
-            <span className="font-label-sm text-label-sm text-secondary bg-secondary-container/60 px-2.5 py-0.5 rounded-full">
-              Synchronized
-            </span>
+            {isSampleTrend ? (
+              <span className="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">
+                Sample Preview
+              </span>
+            ) : (
+              <span className="font-label-sm text-label-sm text-secondary bg-secondary-container/60 px-2.5 py-0.5 rounded-full">
+                Synchronized
+              </span>
+            )}
           </div>
+          {isSampleTrend && (
+            <p className="font-body-sm text-body-sm text-on-surface-variant -mt-1">
+              These are sample trends, not yours. Complete at least 2 skin analyses to see your own metrics trend
+              here.
+            </p>
+          )}
 
           <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
             <div className="flex items-center justify-between">
@@ -221,14 +285,14 @@ export default function Progress() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-headline-sm text-headline-sm text-secondary">{HYDRATION_TREND.current}</div>
-                <div className="font-label-sm text-label-sm text-secondary font-medium">{HYDRATION_TREND.delta}</div>
+                <div className="font-headline-sm text-headline-sm text-secondary">{hydrationTrend.current}</div>
+                <div className="font-label-sm text-label-sm text-secondary font-medium">{hydrationTrend.delta}</div>
               </div>
             </div>
-            <TrendChart trend={HYDRATION_TREND} gradientId="hydrationFill" />
+            <TrendChart trend={hydrationTrend} gradientId="hydrationFill" />
             <div className="flex justify-between font-label-sm text-[11px] text-on-surface-variant px-1 pt-1">
-              {HYDRATION_TREND.labels.map((label, idx) => (
-                <span key={label} className={idx === HYDRATION_TREND.labels.length - 1 ? 'font-bold text-secondary' : ''}>
+              {hydrationTrend.labels.map((label, idx) => (
+                <span key={label} className={idx === hydrationTrend.labels.length - 1 ? 'font-bold text-secondary' : ''}>
                   {label}
                 </span>
               ))}
@@ -247,14 +311,14 @@ export default function Progress() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-headline-sm text-headline-sm text-primary">{REDNESS_TREND.current}</div>
-                <div className="font-label-sm text-label-sm text-primary font-medium">{REDNESS_TREND.delta}</div>
+                <div className="font-headline-sm text-headline-sm text-primary">{rednessTrend.current}</div>
+                <div className="font-label-sm text-label-sm text-primary font-medium">{rednessTrend.delta}</div>
               </div>
             </div>
-            <TrendChart trend={REDNESS_TREND} gradientId="rednessFill" />
+            <TrendChart trend={rednessTrend} gradientId="rednessFill" />
             <div className="flex justify-between font-label-sm text-[11px] text-on-surface-variant px-1 pt-1">
-              {REDNESS_TREND.labels.map((label, idx) => (
-                <span key={label} className={idx === REDNESS_TREND.labels.length - 1 ? 'font-bold text-primary' : ''}>
+              {rednessTrend.labels.map((label, idx) => (
+                <span key={label} className={idx === rednessTrend.labels.length - 1 ? 'font-bold text-primary' : ''}>
                   {label}
                 </span>
               ))}
@@ -278,11 +342,11 @@ export default function Progress() {
             </div>
             <div className="pt-2 space-y-1.5">
               <div className="w-full h-3 rounded-full bg-surface-container flex overflow-hidden">
-                <div className="h-full bg-secondary rounded-full transition-all duration-500" style={{ width: `${BARRIER_SCORE.percent}%` }} />
+                <div className="h-full bg-secondary rounded-full transition-all duration-500" style={{ width: `${barrierScore.percent}%` }} />
               </div>
               <div className="flex justify-between font-label-sm text-label-sm text-on-surface-variant pt-0.5">
-                <span>{BARRIER_SCORE.baseline}</span>
-                <span className="font-semibold text-secondary">{BARRIER_SCORE.current}</span>
+                <span>{barrierScore.baseline}</span>
+                <span className="font-semibold text-secondary">{barrierScore.current}</span>
               </div>
             </div>
           </div>
