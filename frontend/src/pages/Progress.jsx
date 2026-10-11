@@ -117,6 +117,20 @@ export default function Progress() {
         baseline: `${formatDate(trendScansChrono[0].date)}: ${trendScansChrono[0].metrics.barrier.status}`,
       };
 
+  // Scorecard reuses the same real/sample gate as the Trend charts — it's
+  // the same underlying metrics (just a delta between first and last of the
+  // last 4 scans). There's no real "Routine Log" data anywhere yet (that
+  // would need persisted daily-completion history), so that tile only shows
+  // in sample mode rather than displaying a permanently-fake count.
+  const barrierDelta = isSampleTrend
+    ? null
+    : trendScansChrono[trendScansChrono.length - 1].metrics.barrier.value -
+      trendScansChrono[0].metrics.barrier.value;
+  const rednessDeltaValue = isSampleTrend
+    ? null
+    : trendScansChrono[trendScansChrono.length - 1].metrics.redness.value -
+      trendScansChrono[0].metrics.redness.value;
+
   return (
     <TabLayout subtitle="Skin Progress">
       <div className="flex flex-col w-full pb-10 space-y-space-lg px-margin">
@@ -177,15 +191,26 @@ export default function Progress() {
                 <Icon name="verified" className="text-secondary text-[20px]" />
                 <span className="font-headline-sm text-headline-sm text-on-surface">30-Day Synthesis</span>
               </div>
-              <span className="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold uppercase tracking-wider">
-                AI Synced
-              </span>
+              {isSampleTrend ? (
+                <span className="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">
+                  Sample Preview
+                </span>
+              ) : (
+                <span className="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                  AI Synced
+                </span>
+              )}
             </div>
-            <div className="grid grid-cols-3 gap-space-sm pt-space-xs">
+            {isSampleTrend && (
+              <p className="font-body-sm text-body-sm text-on-surface-variant -mt-2">
+                Sample numbers, not yours — unlocks once you've completed 2 skin analyses.
+              </p>
+            )}
+            <div className={`grid gap-space-sm pt-space-xs ${isSampleTrend ? 'grid-cols-3 opacity-50' : 'grid-cols-2'}`}>
               <div className="flex flex-col p-2.5 rounded-DEFAULT bg-surface-container-low">
                 <span className="font-label-sm text-label-sm text-on-surface-variant">Barrier Recov.</span>
                 <span className="font-headline-md text-headline-md text-secondary mt-1 font-semibold">
-                  {SCORECARD.barrierRecovery}
+                  {isSampleTrend ? SCORECARD.barrierRecovery : `${barrierDelta > 0 ? '+' : ''}${barrierDelta}%`}
                 </span>
                 <span className="font-label-sm text-[9px] text-secondary font-medium flex items-center mt-0.5">
                   <Icon name="arrow_upward" className="text-[10px]" /> Healthy Stratum
@@ -194,22 +219,24 @@ export default function Progress() {
               <div className="flex flex-col p-2.5 rounded-DEFAULT bg-surface-container-low">
                 <span className="font-label-sm text-label-sm text-on-surface-variant">Redness Δ</span>
                 <span className="font-headline-md text-headline-md text-primary mt-1 font-semibold">
-                  {SCORECARD.rednessDelta}
+                  {isSampleTrend ? SCORECARD.rednessDelta : `${rednessDeltaValue > 0 ? '+' : ''}${rednessDeltaValue}%`}
                 </span>
                 <span className="font-label-sm text-[9px] text-primary font-medium flex items-center mt-0.5">
                   <Icon name="arrow_downward" className="text-[10px]" /> Redness Drop
                 </span>
               </div>
-              <div className="flex flex-col p-2.5 rounded-DEFAULT bg-surface-container-low">
-                <span className="font-label-sm text-label-sm text-on-surface-variant">Routine Log</span>
-                <span className="font-headline-md text-headline-md text-on-surface mt-1 font-semibold">
-                  {SCORECARD.routineLogDone}
-                  <span className="text-xs font-normal text-on-surface-variant">/{SCORECARD.routineLogTotal}</span>
-                </span>
-                <span className="font-label-sm text-[9px] text-on-surface-variant font-medium mt-0.5">
-                  {Math.round((SCORECARD.routineLogDone / SCORECARD.routineLogTotal) * 100)}% Discipline
-                </span>
-              </div>
+              {isSampleTrend && (
+                <div className="flex flex-col p-2.5 rounded-DEFAULT bg-surface-container-low">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">Routine Log</span>
+                  <span className="font-headline-md text-headline-md text-on-surface mt-1 font-semibold">
+                    {SCORECARD.routineLogDone}
+                    <span className="text-xs font-normal text-on-surface-variant">/{SCORECARD.routineLogTotal}</span>
+                  </span>
+                  <span className="font-label-sm text-[9px] text-on-surface-variant font-medium mt-0.5">
+                    {Math.round((SCORECARD.routineLogDone / SCORECARD.routineLogTotal) * 100)}% Discipline
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -229,7 +256,9 @@ export default function Progress() {
             )}
           </div>
           <div className="bg-surface-container-lowest rounded-lg p-space-sm shadow-sm flex flex-col space-y-space-sm">
-            <BeforeAfterSlider before={beforeAfter.before} after={beforeAfter.after} />
+            <div className={isSampleBeforeAfter ? 'opacity-50' : ''}>
+              <BeforeAfterSlider before={beforeAfter.before} after={beforeAfter.after} />
+            </div>
             {isSampleBeforeAfter && (
               <p className="px-space-xs font-body-sm text-body-sm text-on-surface-variant">
                 These are sample photos, not yours. Save at least 2 scans (toggle "Save this photo?" on the Skin
@@ -273,80 +302,82 @@ export default function Progress() {
             </p>
           )}
 
-          <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-space-xs">
-                <div className="w-8 h-8 rounded-full bg-secondary-container/60 flex items-center justify-center text-secondary">
-                  <Icon name="water_drop" className="text-[18px]" />
+          <div className={`flex flex-col space-y-space-md ${isSampleTrend ? 'opacity-50' : ''}`}>
+            <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-space-xs">
+                  <div className="w-8 h-8 rounded-full bg-secondary-container/60 flex items-center justify-center text-secondary">
+                    <Icon name="water_drop" className="text-[18px]" />
+                  </div>
+                  <div>
+                    <div className="font-label-lg text-label-lg text-on-surface">Hydration Index</div>
+                    <div className="font-body-sm text-body-sm text-on-surface-variant">Epidermal moisture capacity</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-label-lg text-label-lg text-on-surface">Hydration Index</div>
-                  <div className="font-body-sm text-body-sm text-on-surface-variant">Epidermal moisture capacity</div>
+                <div className="text-right">
+                  <div className="font-headline-sm text-headline-sm text-secondary">{hydrationTrend.current}</div>
+                  <div className="font-label-sm text-label-sm text-secondary font-medium">{hydrationTrend.delta}</div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-headline-sm text-headline-sm text-secondary">{hydrationTrend.current}</div>
-                <div className="font-label-sm text-label-sm text-secondary font-medium">{hydrationTrend.delta}</div>
+              <TrendChart trend={hydrationTrend} gradientId="hydrationFill" />
+              <div className="flex justify-between font-label-sm text-[11px] text-on-surface-variant px-1 pt-1">
+                {hydrationTrend.labels.map((label, idx) => (
+                  <span key={label} className={idx === hydrationTrend.labels.length - 1 ? 'font-bold text-secondary' : ''}>
+                    {label}
+                  </span>
+                ))}
               </div>
             </div>
-            <TrendChart trend={hydrationTrend} gradientId="hydrationFill" />
-            <div className="flex justify-between font-label-sm text-[11px] text-on-surface-variant px-1 pt-1">
-              {hydrationTrend.labels.map((label, idx) => (
-                <span key={label} className={idx === hydrationTrend.labels.length - 1 ? 'font-bold text-secondary' : ''}>
-                  {label}
-                </span>
-              ))}
-            </div>
-          </div>
 
-          <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-space-xs">
-                <div className="w-8 h-8 rounded-full bg-primary-fixed/50 flex items-center justify-center text-primary">
-                  <Icon name="grain" className="text-[18px]" />
+            <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-space-xs">
+                  <div className="w-8 h-8 rounded-full bg-primary-fixed/50 flex items-center justify-center text-primary">
+                    <Icon name="grain" className="text-[18px]" />
+                  </div>
+                  <div>
+                    <div className="font-label-lg text-label-lg text-on-surface">Redness &amp; Sensitivity</div>
+                    <div className="font-body-sm text-body-sm text-on-surface-variant">Visible redness over time</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-label-lg text-label-lg text-on-surface">Redness &amp; Sensitivity</div>
-                  <div className="font-body-sm text-body-sm text-on-surface-variant">Visible redness over time</div>
+                <div className="text-right">
+                  <div className="font-headline-sm text-headline-sm text-primary">{rednessTrend.current}</div>
+                  <div className="font-label-sm text-label-sm text-primary font-medium">{rednessTrend.delta}</div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-headline-sm text-headline-sm text-primary">{rednessTrend.current}</div>
-                <div className="font-label-sm text-label-sm text-primary font-medium">{rednessTrend.delta}</div>
+              <TrendChart trend={rednessTrend} gradientId="rednessFill" />
+              <div className="flex justify-between font-label-sm text-[11px] text-on-surface-variant px-1 pt-1">
+                {rednessTrend.labels.map((label, idx) => (
+                  <span key={label} className={idx === rednessTrend.labels.length - 1 ? 'font-bold text-primary' : ''}>
+                    {label}
+                  </span>
+                ))}
               </div>
             </div>
-            <TrendChart trend={rednessTrend} gradientId="rednessFill" />
-            <div className="flex justify-between font-label-sm text-[11px] text-on-surface-variant px-1 pt-1">
-              {rednessTrend.labels.map((label, idx) => (
-                <span key={label} className={idx === rednessTrend.labels.length - 1 ? 'font-bold text-primary' : ''}>
-                  {label}
-                </span>
-              ))}
-            </div>
-          </div>
 
-          <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-space-xs">
-                <div className="w-8 h-8 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary">
-                  <Icon name="shield" className="text-[18px]" />
+            <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col space-y-space-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-space-xs">
+                  <div className="w-8 h-8 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary">
+                    <Icon name="shield" className="text-[18px]" />
+                  </div>
+                  <div>
+                    <div className="font-label-lg text-label-lg text-on-surface">Barrier Strength Score</div>
+                    <div className="font-body-sm text-body-sm text-on-surface-variant">Estimated from your photo trends</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-label-lg text-label-lg text-on-surface">Barrier Strength Score</div>
-                  <div className="font-body-sm text-body-sm text-on-surface-variant">Estimated from your photo trends</div>
+                <span className="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md font-semibold">
+                  Optimal Defense
+                </span>
+              </div>
+              <div className="pt-2 space-y-1.5">
+                <div className="w-full h-3 rounded-full bg-surface-container flex overflow-hidden">
+                  <div className="h-full bg-secondary rounded-full transition-all duration-500" style={{ width: `${barrierScore.percent}%` }} />
                 </div>
-              </div>
-              <span className="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md font-semibold">
-                Optimal Defense
-              </span>
-            </div>
-            <div className="pt-2 space-y-1.5">
-              <div className="w-full h-3 rounded-full bg-surface-container flex overflow-hidden">
-                <div className="h-full bg-secondary rounded-full transition-all duration-500" style={{ width: `${barrierScore.percent}%` }} />
-              </div>
-              <div className="flex justify-between font-label-sm text-label-sm text-on-surface-variant pt-0.5">
-                <span>{barrierScore.baseline}</span>
-                <span className="font-semibold text-secondary">{barrierScore.current}</span>
+                <div className="flex justify-between font-label-sm text-label-sm text-on-surface-variant pt-0.5">
+                  <span>{barrierScore.baseline}</span>
+                  <span className="font-semibold text-secondary">{barrierScore.current}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -370,7 +401,7 @@ export default function Progress() {
               View All Scans
             </button>
           </div>
-          <div className="space-y-space-sm">
+          <div className={`space-y-space-sm ${isSampleMilestones ? 'opacity-50' : ''}`}>
             {milestones.map((entry) => (
               <div key={entry.id} className="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex items-center space-x-space-md">
                 <div className="relative w-14 h-14 rounded-DEFAULT overflow-hidden flex-shrink-0 bg-surface-container flex items-center justify-center">
