@@ -5,7 +5,7 @@ import Icon from '../components/Icon.jsx';
 import ToggleSwitch from '../components/ToggleSwitch.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { analyzeSkinPhoto } from '../services/skinAnalysisService.js';
-import { SKIN_SCAN_PLACEHOLDER, SAMPLE_TELEMETRY } from '../data/analysis.js';
+import { SKIN_SCAN_PLACEHOLDER } from '../data/analysis.js';
 
 const PHOTO_RETENTION_DAYS = import.meta.env.VITE_PHOTO_RETENTION_DAYS || 7;
 
@@ -226,38 +226,6 @@ export default function SkinAnalysis() {
             </button>
           )}
         </div>
-
-        <section className="flex flex-col gap-space-md pt-space-xs">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-space-xs">
-              <Icon name="biotech" className="text-[20px] text-primary" />
-              <h3 className="font-headline-sm text-headline-sm text-on-surface">Cosmetic Telemetry Sample</h3>
-            </div>
-            <span className="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-medium">
-              Demo Profile
-            </span>
-          </div>
-          <div className="grid grid-cols-2 gap-space-sm">
-            {SAMPLE_TELEMETRY.map((metric) => (
-              <div key={metric.key} className="flex flex-col p-space-md rounded-lg bg-surface-container-lowest shadow-sm gap-space-xs">
-                <div className="flex items-center justify-between text-on-surface-variant">
-                  <span className="font-label-sm text-label-sm font-semibold tracking-wider uppercase">{metric.label}</span>
-                  <Icon name={metric.icon} className={`text-[18px] ${metric.color.replace('bg-', 'text-')}`} />
-                </div>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="font-headline-lg text-headline-lg text-on-surface font-semibold">
-                    {metric.display ?? metric.value}
-                  </span>
-                  {metric.suffix && <span className="font-headline-sm text-headline-sm text-on-surface font-normal">{metric.suffix}</span>}
-                </div>
-                <div className="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden mt-1">
-                  <div className={`h-full ${metric.color} rounded-full`} style={{ width: `${metric.value}%` }} />
-                </div>
-                <span className={`font-label-sm text-label-sm font-semibold mt-1 ${metric.noteColor}`}>{metric.note}</span>
-              </div>
-            ))}
-          </div>
-        </section>
 
         <div className="flex items-center justify-center text-center px-space-md py-space-sm rounded-lg bg-surface-container-high/60">
           <p className="font-body-sm text-body-sm text-on-surface-variant">

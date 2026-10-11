@@ -33,10 +33,3 @@ export const MOCK_ANALYSIS_RESULT = {
     detail: 'Your cheeks look a little more flushed in recent photos than usual. You might try pausing glycolic acid above 7% for about a week and see if things look calmer — and check with a dermatologist if redness persists.',
   },
 };
-
-export const SAMPLE_TELEMETRY = [
-  { key: 'hydration', label: 'Hydration', value: 82, suffix: '%', icon: 'water_drop', color: 'bg-secondary', note: 'Looks Hydrated', noteColor: 'text-secondary' },
-  { key: 'barrier', label: 'Barrier', value: 90, display: 'High', icon: 'shield', color: 'bg-secondary', note: 'No Visible Dryness', noteColor: 'text-secondary' },
-  { key: 'smoothness', label: 'Smoothness', value: 91, suffix: '%', icon: 'grain', color: 'bg-primary-container', note: 'Even Texture', noteColor: 'text-on-surface-variant' },
-  { key: 'redness', label: 'Redness', value: 12, suffix: '%', icon: 'spa', color: 'bg-secondary', note: 'Looks Calm', noteColor: 'text-secondary' },
-];
