@@ -24,6 +24,14 @@ const RETENTION_DAYS = Number(process.env.PHOTO_RETENTION_DAYS || 7);
 const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
+// TEMPORARY — photo storage kill switch (2026-10-12). Set back to `true` to
+// re-enable. While `false`, /api/skin-analysis never writes a photo to disk
+// regardless of what storeConsent the client sends (the "Save this photo?"
+// toggle on the Skin Analysis screen still shows and works client-side, it
+// just has no effect server-side) — scores/metrics are still saved as
+// always, only the photo file itself is skipped. Nothing else changes.
+const PHOTO_STORAGE_ENABLED = false;
+
 const app = express();
 app.use(cors({ origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173', credentials: true }));
 app.use(cookieParser());
@@ -145,11 +153,12 @@ app.post('/api/chat', async (req, res) => {
 // ---------------------------------------------------------------------------
 
 app.post('/api/skin-analysis', requireAuth, async (req, res) => {
-  const { imageBase64, mediaType = 'image/jpeg', storeConsent = false } = req.body ?? {};
+  const { imageBase64, mediaType = 'image/jpeg', storeConsent: requestedStoreConsent = false } = req.body ?? {};
   if (!imageBase64 || typeof imageBase64 !== 'string') {
     return res.status(400).json({ error: 'imageBase64 is required' });
   }
   const data = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
+  const storeConsent = PHOTO_STORAGE_ENABLED && requestedStoreConsent;
 
   try {
     const response = await client.messages.create({
