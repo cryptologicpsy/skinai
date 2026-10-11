@@ -1,0 +1,62 @@
+# Production stack for the VPS. Pulls pre-built images from GHCR (built by
+# .github/workflows/deploy.yml) — nothing is built on the server itself.
+#
+# Required before `docker compose -f docker-compose.prod.yml up -d`:
+#   - IMAGE_TAG   env var (or .env entry) set to a real pushed image tag,
+#                 e.g. a Git commit SHA. No default on purpose — this refuses
+#                 to silently fall back to :latest in production.
+#   - GHCR_OWNER  env var (or .env entry) set to your GitHub username/org,
+#                 e.g. GHCR_OWNER=yourname
+#   - backend/.env present on the VPS with real secrets (never committed).
+#
+# Published ports are bound to 127.0.0.1 only — this host's existing Nginx
+# (not managed by this project) is what actually faces the internet for
+# skinai.vriva.gr. See docs/deployment.md for the reverse-proxy config and
+# the one-time VPS setup checklist (incl. how the VPS authenticates to GHCR
+# if the packages are private).
+name: skinai
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    # No `ports:` — intentionally unreachable from outside the Docker
+    # network. The backend talks to it via the internal hostname "mongo".
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ghcr.io/${GHCR_OWNER:?set GHCR_OWNER}/skinai-backend:${IMAGE_TAG:?set IMAGE_TAG — never defaults to latest in prod}
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      # Same reasoning as docker-compose.yml: these two are specific to
+      # running inside this Docker network / behind this domain, and take
+      # precedence over whatever's in backend/.env.
+      MONGODB_URI: mongodb://mongo:27017
+      FRONTEND_ORIGIN: https://skinai.vriva.gr
+    volumes:
+      - backend_uploads:/app/uploads
+    ports:
+      - '127.0.0.1:5001:8787'
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  frontend:
+    image: ghcr.io/${GHCR_OWNER:?set GHCR_OWNER}/skinai-frontend:${IMAGE_TAG:?set IMAGE_TAG — never defaults to latest in prod}
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:8081:80'
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+  backend_uploads:

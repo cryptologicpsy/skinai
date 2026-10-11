@@ -1,0 +1,45 @@
+export const QUESTIONNAIRE_STEPS = [
+  {
+    id: 'skinType',
+    title: 'How would you describe your skin?',
+    subtitle: 'This calibrates your baseline barrier & sebum model.',
+    icon: 'dermatology',
+    multi: false,
+    options: [
+      { value: 'oily', label: 'Oily', icon: 'water_drop' },
+      { value: 'dry', label: 'Dry', icon: 'dry' },
+      { value: 'combination', label: 'Combination', icon: 'blur_on' },
+      { value: 'sensitive', label: 'Sensitive', icon: 'favorite' },
+      { value: 'normal', label: 'Normal / Balanced', icon: 'spa' },
+    ],
+  },
+  {
+    id: 'concerns',
+    title: "What's top of mind for your skin?",
+    subtitle: 'Select as many as apply — this tunes your AI formulation protocol.',
+    icon: 'biotech',
+    multi: true,
+    options: [
+      { value: 'redness', label: 'Redness reduction', icon: 'favorite' },
+      { value: 'barrier', label: 'Barrier repair', icon: 'shield' },
+      { value: 'hydration', label: 'Hydration retention', icon: 'water_drop' },
+      { value: 'texture', label: 'Pore & texture', icon: 'grain' },
+      { value: 'aging', label: 'Fine lines & firmness', icon: 'auto_awesome' },
+      { value: 'tone', label: 'Uneven tone', icon: 'contrast' },
+    ],
+  },
+  {
+    id: 'exclusions',
+    title: 'Anything we should avoid?',
+    subtitle: 'We will filter every recommendation against these.',
+    icon: 'security',
+    multi: true,
+    options: [
+      { value: 'fragrance-free', label: 'Fragrance-free', icon: 'eco' },
+      { value: 'eo-free', label: 'Essential oil-free', icon: 'spa' },
+      { value: 'vegan', label: 'Vegan only', icon: 'cruelty_free' },
+      { value: 'fungal-acne-safe', label: 'Fungal-acne safe', icon: 'verified' },
+      { value: 'none', label: 'No restrictions', icon: 'check_circle' },
+    ],
+  },
+];

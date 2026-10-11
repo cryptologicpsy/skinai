@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>SkinAI — Your AI Beauty Assistant</title>
+    <meta name="description" content="SkinAI AI-powered skincare assistant prototype" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <!-- Material Symbols is self-hosted (public/fonts/) instead of loaded from
+         Google Fonts — see src/index.css for the @font-face. Icons render as
+         literal ligature text (e.g. "home") until this font is available, so
+         a slow/flaky third-party CDN round-trip showed that raw text first,
+         which looked "broken" for several seconds before swapping in. The
+         Google Fonts version also shipped the full variable-font matrix
+         (wght 100-700 x FILL 0-1 x GRAD -50..200 x opsz 20-48, ~4MB) even
+         though the app only ever uses weight 400 / grade 0 — narrowing that
+         axis range got it to ~1MB, and self-hosting removes the extra DNS
+         + TLS + CDN-routing round trip entirely so it loads with the app's
+         own bundle instead of racing a separate origin. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-surface text-on-surface">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

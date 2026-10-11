@@ -1,0 +1,13 @@
+# Root safety net — frontend/ and backend/ also have their own .gitignore,
+# this just makes sure nothing secret/generated slips in regardless of which
+# directory `git add` is run from.
+node_modules
+dist
+.env
+.env.*
+!.env.example
+*.log
+uploads/
+
+.DS_Store
+Thumbs.db

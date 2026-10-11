@@ -1,0 +1,73 @@
+# Local development stack. Brings up Mongo + the backend (hot-reload via
+# `node --watch`) + the frontend (Vite dev server) without needing Node
+# installed on the host. For day-to-day work you can keep using `npm run dev`
+# directly in frontend/ and backend/ (faster) — this is for parity / anyone
+# without Node locally. See docker-compose.prod.yml for the production stack.
+name: skinai
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    # Published on 27018 (not 27017) so it never clashes with another local
+    # Mongo container you might already have running — matches the port this
+    # project has used for local dev since before this compose file existed.
+    ports:
+      - '127.0.0.1:27018:27017'
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    command: npm run dev
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      # Overrides whatever is in backend/.env for the two values that are
+      # specific to running *inside* this Docker network — everything else
+      # (API keys, JWT secret, retention settings) still comes from the
+      # env_file above, so the same backend/.env also works for running the
+      # backend directly on the host (`npm run dev` in backend/, no Docker).
+      MONGODB_URI: mongodb://mongo:27017
+      FRONTEND_ORIGIN: http://localhost:8081
+    volumes:
+      - ./backend:/app
+      - /app/node_modules # keeps the image's own (Linux) node_modules — bcrypt has native bindings that a bind-mounted Windows/macOS node_modules would break
+      - backend_uploads_dev:/app/uploads
+    ports:
+      - '127.0.0.1:5001:8787'
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      # frontend/Dockerfile's final stage is a slim nginx image with no
+      # node/npm — target the earlier "deps" stage instead (has the full
+      # Node toolchain, skips the production build) for the dev server.
+      target: deps
+    command: npm run dev -- --host --port 5173
+    restart: unless-stopped
+    environment:
+      # Vite's own dev-server proxy (vite.config.js) forwards /api and
+      # /uploads to this URL — it has to be the Docker-network service name,
+      # not localhost, because the proxy runs inside this container.
+      VITE_API_BASE_URL: http://backend:8787
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # same reasoning as the backend — esbuild ships a platform-specific binary
+    ports:
+      - '127.0.0.1:8081:5173'
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+  backend_uploads_dev:
