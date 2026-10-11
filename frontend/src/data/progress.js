@@ -12,13 +12,13 @@ export const BEFORE_AFTER = {
     label: 'Day 1 (Oct 12)',
     metricLabel: 'Redness 28%',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDRTatt_spNlRYeOgfSMyxs-oaJW3S7FYKRP9CC41C1CrJl9wZP6CleN-XoW3sV1QbeA1aV5KSKTXF5hohXFbeR_817YwDejT6GTtTPbg3Aqos3p2mJse0AE6KqV6HNyvr_Pt5qMDMB9qL_gGHej2634lQUZwHW6wscYiBP_mAhGgh17Z7m2uPyNZRxoxGVkGvGgtGQVMeKr5lGyrZdfbyOng-a8MQESDUpqDleycsms-Sg6A_8Uec',
+      '/images/img-e1313795ad.webp',
   },
   after: {
     label: 'Day 30 (Today)',
     metricLabel: 'Hydration 82%',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDmrt8J86xirgt3NP5OZKdoeYdQm0b48gThy4_ps48cr7Z1q3f22VF-MMEs6vCNSl85MUi6kpQUWesNPBqNbYoLZsuMhFjLgSKw1tKJxjPkNCtrk97jHolKIAVw7l8qYZzOBBlwcQN7AuJgjZBLF46Je7Ox8OVOJhEgnT9Q7NB7HxR4a4wtt83wap7BmltWLKnWT6yQOGr2MbG4koo31xOKxas_6dUtaZal8D4AlRdcwc6XyBzeYEc',
+      '/images/img-96a31c45c9.webp',
   },
 };
 
@@ -65,7 +65,7 @@ export const WEEKLY_MILESTONES = [
     note: 'Texture smoothed significantly after adding peptide cream formulation.',
     latest: true,
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDnHwzjhY-LuWAlVheEzemQzPX9EnMnAWushnYKJzvn2WWnrqcyJKItPLHhlqPtCDjdu7nkQY8Kn7YUo8M5BFFvSWRGdxu8LsaDQdU4qwE_QHEss-ahMM7_q-99AobBLP4gVXDzTfIlWLAXENwJI3xQhil8yDq6-OMDjL9KeVAE8uXl4arjlCyKd2A33IPHf7xnTENVLVIn3iK125otEddxUbulfaoljSVcwposhbyemTJHvwBINmw',
+      '/images/img-8e5545955a.webp',
   },
   {
     id: 'm2',
@@ -73,7 +73,7 @@ export const WEEKLY_MILESTONES = [
     score: 89,
     note: 'Much less visible flakiness around the mouth area in recent photos.',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDjMGBvUi8ZYArR_3Tt5r52dKlth85TbRYX_F05vFdEhna7V-ddgWTtpSOJvSlONx3e93Ha6ID2tY0MdyWjEUN9KQ6DlguqOnXfY8KqvG-joD6rShvKqF6VieZndHfHKi2K1dlW9guKdK8KM2ZgMyjLzJ9KEPDZUx2YmMKZSyaCeVQV_BqM8imQnmgaLt4KEJb5S76w0GEezLlTEZnY4VmCbTttD-Oie1ps7mHqOvkQgwpkUUAtCy8',
+      '/images/img-aa6fa1596e.webp',
   },
   {
     id: 'm3',
@@ -81,7 +81,7 @@ export const WEEKLY_MILESTONES = [
     score: 81,
     note: 'Centella asiatica soothing mist introduced; tightness reduced post-cleanse.',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAcmY1jFbODQQyhFt8w2mH_RmISPTTfdkTQOgnNgr1R41hZMLIH1EQerRVZHlBkKoIgoEkEDIdZqbGJQmdN8iNZdArmwIOCpguIztj94WGoUw7UliI_A5SG7a6UVFqRM053CJGUOjUzcyjFt4jBYJDfpPPTwuui6I7xe_I4fQvMvaZRmAw8ZjFVCxnZ7tUTW9ZNeo3yUrZunylwIovo9JdszZXJfL06vInHe5Bc8YJms8-351NMVOc',
+      '/images/img-702682298b.webp',
   },
   {
     id: 'm4',
@@ -89,6 +89,6 @@ export const WEEKLY_MILESTONES = [
     score: 74,
     note: 'Starting point — early photos showed more visible dryness and redness.',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBjjZZj7vlEbJnRSRVpFM41y2y8fYVdUHs2cU1SIr8JYysRiPsh2yTmbWhOrLxBcmy0TfNUBfcMBKm5UobIMGcN2R-7wtqnuBG4uBBUT_Fec7zSqAXPOUmI2keQ5vla5ih-g0TlYZKHby9BSV1vhd7Kq5awoNBvPb2oAyIzZBAhrGJx70oZw_azjf39MrJOyeL5nJACrq7v4UtL99Hwms2SsXA1KOLOu6Pu8sbnMqB_MuZAIXGtU-Q',
+      '/images/img-0bddf03521.webp',
   },
 ];

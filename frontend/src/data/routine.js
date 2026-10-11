@@ -12,7 +12,7 @@ export const AM_ROUTINE = [
       'Dissolves overnight sebum & impurities gently without stripping the vital acid mantle or lipid barrier.',
     meta: { icon: 'verified', label: 'Colloidal Oat • Prebiotics' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCJxEip4oPw706U23MQV9RDY1iCKVbBLT4xxUqmAGx9gnupJ9egK8wt6ddaeh-wdEnHa8VVsP4TEZ_FqTKZNHJRuNibklOHmRfT3KwgqnBa1BePtLpepWJdpub-TwHVORzHFgtx7P7tc_H2uwN7bi6_p99lkClp4GUiHYMOvIyHuEFhPMLY5H9fec-0nSiaWYiGszXbg8aWYTCM43YGRcV69waL9zbP1uZ8ZZYyhV4MfJ4BLULERP4',
+      '/images/img-f39ff53f7b.webp',
     completedAt: null,
   },
   {
@@ -25,7 +25,7 @@ export const AM_ROUTINE = [
       'Draws in deep hydration while helping to visibly calm redness across the cheeks.',
     meta: { icon: 'water_drop', label: 'Deep Hydro-Plump' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuB5oqpCHFZE5js3NqnbtblBNRTuFh-dh7DH1zG-i_8KhQASBIKvQlm8alf5iWqhVyO2cX9oFAijUzeqzB4nbPikppqZdBg5K9icvXBXwmh5-ksvc18wUzFiWPbR2VBXen0nVjjRFiqtPNaDOPOSukQM4Q0D-tpOelQb6lrXMuhA-5tOxQVgu5zfrflIcb0pWi6f-SZTz-VRBl64TOCzZB5kzvD5pZf0X0XgpxHvo05fTrnnyLY7pyw',
+      '/images/img-80a5004398.webp',
     completedAt: null,
   },
   {
@@ -38,7 +38,7 @@ export const AM_ROUTINE = [
       'Locks in active serum nutrients, synthesizes skin ceramides, and reinforces an impenetrable lipid moisture shield.',
     meta: { icon: 'shield', label: 'Barrier Defense' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBfO_jERVX5PKXC3fAwOwigf2IAyCMqIqUvpguQwWEciVof5TcWJJTvskNaUIaxbGLHytwAJ9YIDCQvbAv_X_40_x_LPYkVlYd4myLYl-zVuunVKb8hG88mJjkdN2bDM0ERNR0VpYwKlc0ngE2QjZeaREADN2J0sJo3DnRLkM_Tx1VZ_h8Lm9lh4GazfQiuuAwGipHmNEW2thb-Ssj0JLpBcnXIVDgWvmvlM-ORSOQ5YBH8Zu0ncvM',
+      '/images/img-a121658d24.webp',
     completedAt: null,
   },
   {
@@ -51,7 +51,7 @@ export const AM_ROUTINE = [
       '100% non-nano zinc oxide shields UVA, UVB, and HEV blue light wavelengths to protect fresh cellular turnover from photo-damage.',
     meta: { icon: 'wb_sunny', label: 'Zinc Oxide + Vit E' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBVTRfRkixvEgz5z37l4lIxYf-fdyw_h65pvlpNyde23mbqznhCbo_BpTWVnz1hS69pzU83D9jy0RSc3CDbgA0HVnc4u67CtWr0KhxsvsODHfS9X5WBjYAB2BkMLD3V3PBnjwweuzIG26rU5MUtJTJ_YaFKIA28-aK6aPw_SNscLp-q-wPUdFCe9opstf2qeCeateOZWyCD1cCwlibVpsC-uv4KiRb9wvVUSPt6yGRKgWp3nMb-Xwg',
+      '/images/img-1bbb9b6df0.webp',
     completedAt: null,
   },
 ];
@@ -67,7 +67,7 @@ export const PM_ROUTINE = [
       'Breaks down SPF, sebum and airborne pollutants before the water-based cleanse, preventing barrier-stripping over-scrubbing.',
     meta: { icon: 'water_drop', label: 'Squalane + Jojoba' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCJxEip4oPw706U23MQV9RDY1iCKVbBLT4xxUqmAGx9gnupJ9egK8wt6ddaeh-wdEnHa8VVsP4TEZ_FqTKZNHJRuNibklOHmRfT3KwgqnBa1BePtLpepWJdpub-TwHVORzHFgtx7P7tc_H2uwN7bi6_p99lkClp4GUiHYMOvIyHuEFhPMLY5H9fec-0nSiaWYiGszXbg8aWYTCM43YGRcV69waL9zbP1uZ8ZZYyhV4MfJ4BLULERP4',
+      '/images/img-f39ff53f7b.webp',
     completedAt: null,
   },
   {
@@ -80,7 +80,7 @@ export const PM_ROUTINE = [
       'Time-released retinal complex supports cellular turnover while buffered with soothing botanicals to minimize nighttime irritation.',
     meta: { icon: 'bedtime', label: 'Buffered Retinal' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuB5oqpCHFZE5js3NqnbtblBNRTuFh-dh7DH1zG-i_8KhQASBIKvQlm8alf5iWqhVyO2cX9oFAijUzeqzB4nbPikppqZdBg5K9icvXBXwmh5-ksvc18wUzFiWPbR2VBXen0nVjjRFiqtPNaDOPOSukQM4Q0D-tpOelQb6lrXMuhA-5tOxQVgu5zfrflIcb0pWi6f-SZTz-VRBl64TOCzZB5kzvD5pZf0X0XgpxHvo05fTrnnyLY7pyw',
+      '/images/img-80a5004398.webp',
     completedAt: null,
   },
   {
@@ -93,7 +93,7 @@ export const PM_ROUTINE = [
       'Seals in overnight actives and reinforces the lipid matrix while cellular repair processes peak during sleep.',
     meta: { icon: 'shield', label: 'Barrier Defense' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBfO_jERVX5PKXC3fAwOwigf2IAyCMqIqUvpguQwWEciVof5TcWJJTvskNaUIaxbGLHytwAJ9YIDCQvbAv_X_40_x_LPYkVlYd4myLYl-zVuunVKb8hG88mJjkdN2bDM0ERNR0VpYwKlc0ngE2QjZeaREADN2J0sJo3DnRLkM_Tx1VZ_h8Lm9lh4GazfQiuuAwGipHmNEW2thb-Ssj0JLpBcnXIVDgWvmvlM-ORSOQ5YBH8Zu0ncvM',
+      '/images/img-a121658d24.webp',
     completedAt: null,
   },
   {
@@ -106,7 +106,7 @@ export const PM_ROUTINE = [
       'A final occlusive layer over dry patches locks in every prior step for maximum overnight transepidermal water retention.',
     meta: { icon: 'nightlight', label: 'Shea + Ceramide NP' },
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBVTRfRkixvEgz5z37l4lIxYf-fdyw_h65pvlpNyde23mbqznhCbo_BpTWVnz1hS69pzU83D9jy0RSc3CDbgA0HVnc4u67CtWr0KhxsvsODHfS9X5WBjYAB2BkMLD3V3PBnjwweuzIG26rU5MUtJTJ_YaFKIA28-aK6aPw_SNscLp-q-wPUdFCe9opstf2qeCeateOZWyCD1cCwlibVpsC-uv4KiRb9wvVUSPt6yGRKgWp3nMb-Xwg',
+      '/images/img-1bbb9b6df0.webp',
     completedAt: null,
   },
 ];

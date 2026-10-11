@@ -14,7 +14,7 @@ const PRODUCT_OF_THE_DAY = {
   name: 'Barrier Pure Mineral Shield',
   note: 'Zinc Oxide 18% with Centella Asiatica',
   image:
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuCyLXe7uw-XWbS3ommHPnXTFhxKyyniDVPUiPDO1OVCfjWK-HtcMXqrdJnIuJvQN_dRNQn_2kklivhsVm_zax2hHhBO8t3Xp1jRZkB8iBamTTeXsr01gVL5AZca_hOWthmZeHb6PksvDTRXv83m6cbsDnQs4AovZ50ZJIlmPWdv6UiQ1lArDAj1V6_qLZEWtBsKkiWhJDLeO_F9zxS6t4z0JMj22tHDsWwb3p2tcgWVAucoa5lEXno',
+    '/images/img-73ef47d3aa.webp',
 };
 
 export default function Dashboard() {
@@ -88,7 +88,7 @@ export default function Dashboard() {
                 <img
                   alt="Serum bottle beside blush peony petals"
                   className="w-full h-full object-cover rounded-DEFAULT"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHnWb8fyuunclbJaff3hioeXps1wcMday7bB33zPsxsVIBLUrBlOQCJRd0WC6-cQiih1vExTx6EJzgqNxjQxszk9rur-cSUe3PtdAyDLs8HSlVPJRlYxC34A8X24_zUylqs7m3Oh5cqH2qeN0RLipZPgRnz4-bLHoPjyHkYh3L-V8pg-cVTszUcmHsoZ_GXofrAW3azKAHRjsx_aCKQiV1770aZ1FYwzkxw-TXN7lp48OsZ2zEMss"
+                  src="/images/img-81d2d22ef6.webp"
                 />
               </div>
             </div>

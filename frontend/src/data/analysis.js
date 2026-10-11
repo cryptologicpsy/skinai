@@ -2,10 +2,10 @@
 // from services/skinAnalysisService.js once a backend + vision model is wired up.
 
 export const LATEST_SCAN_IMAGE =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuAoJTUH1nIWfcOKEhY_-YnbEATcwiVVkl7FI7ZldDATQBHvFukgljtgeZSS0QDsTT_uJmDpRTUToiilaJTV011ePE6AEHJdMrdixg6trw05KsbfJDNMxhwG9PREKsTEredbD6qFHiJBT4aRzm2hTv9TgYg0j0ap1K6iPjERFePqhMxPsk-PRquOgAkOGGhJtQw4TzbjSK3FoiWAyfp39yth_0kkeTXQaAkr2L7a6W4_TpawBU6ypaA';
+  '/images/img-602b98d62e.webp';
 
 export const SKIN_SCAN_PLACEHOLDER =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuAgkF99Z7ylVgK3ab6ZyOERdYjMKvzMMJ1iyiO3q8ND-YBxraOerZDmlirI_3qkpOZyrQiCdLXg6pd8fSL_bs0B2isNwB5c8IS8bwxHxrYoMiK6rzNpIBWKGvwFPt2Iuyg2GhJPgSnvkSU3v2I0HTHHtE-Bc980ezTgxWqn4GmpssuDwrM2oW8DqyFXVgzx-11rS3fB_ZwBYsMsfSy_eni86YAMtGSe9KKnjUxv5xYiMEmr0UJjp00';
+  '/images/img-67c084b052.webp';
 
 export const MOCK_ANALYSIS_RESULT = {
   capturedAt: 'Yesterday, 8:15 PM',
