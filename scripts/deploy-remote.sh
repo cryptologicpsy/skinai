@@ -14,7 +14,10 @@ GHCR_OWNER="${GHCR_OWNER:?GHCR_OWNER env var is required}"
 cd "$(dirname "$0")/.."
 
 git fetch origin main
-git checkout "$IMAGE_TAG"
+# --force: this clone exists only to be deployed from — always converge to
+# exactly the pushed commit, discarding any local drift (e.g. a manual
+# `chmod` during setup) rather than aborting the deploy over it.
+git checkout --force "$IMAGE_TAG"
 
 export IMAGE_TAG
 export GHCR_OWNER
