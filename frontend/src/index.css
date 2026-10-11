@@ -89,3 +89,19 @@
   -webkit-font-smoothing: antialiased;
   vertical-align: middle;
 }
+
+/* Invisible until main.jsx confirms (via the Font Loading API) that the
+   icon font has actually finished loading — on a slow connection this is
+   the difference between "icon spot is briefly blank" (fine) and "page
+   shows literal ligature text like 'water_drop' for several seconds" (what
+   was being reported as the page looking broken on first load).
+   `color: transparent` rather than `opacity`/`visibility` so layout/size is
+   identical before and after — nothing shifts when it pops in. Scoped to
+   `:not(.icons-ready)` + `!important` so it reliably wins over whichever
+   Tailwind `text-*` color utility is also applied to the same icon span,
+   regardless of utility-vs-custom-CSS ordering in the compiled stylesheet —
+   once `icons-ready` is added, this selector stops matching anything and
+   every icon's own color utility applies normally, unmodified. */
+html:not(.icons-ready) .material-symbols-outlined {
+  color: transparent !important;
+}
